@@ -1,15 +1,17 @@
-//
-// Created by ampheee on 6/28/23.
-//
+#ifndef _SMARTCALC_ARITHMETICS_H_
+#define _SMARTCALC_ARITHMETICS_H_
 
-#ifndef SMARTCALC_ARITHMETICS_H
-#define SMARTCALC_ARITHMETICS_H
-
+#include "calculator.h"
 
 typedef struct LStack {
     char L;
     LStack *next;
 } LStack;
+
+struct Priority {
+    struct  key;
+    struct Value value;
+};
 
 int popL();
 int backL();
@@ -17,4 +19,4 @@ void pushL();
 void clearL();
 
 
-#endif //SMARTCALC_ARITHMETICS_H
+#endif //_SMARTCALC_ARITHMETICS_H_
