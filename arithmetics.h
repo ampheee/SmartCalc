@@ -3,15 +3,26 @@
 
 #include "calculator.h"
 
+#define MAP_SIZE
+
 typedef struct LStack {
     char L;
     LStack *next;
 } LStack;
 
 struct Priority {
-    struct  key;
+    struct  key key;
     struct Value value;
 };
+
+struct Key {
+    struct point p1;
+    struct point p2;
+    int i;
+    int j;
+};
+
+
 
 int popL();
 int backL();

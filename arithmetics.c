@@ -4,6 +4,9 @@ int eval_expression(const gchar *expression) {
     return 0;
 }
 
+//realize: dijkstra polish notation
+//output error or result
+
 // int popL(LStack *stack) {
 //     return 0;
 // }
@@ -14,8 +17,6 @@ int eval_expression(const gchar *expression) {
 
 int get_hash(Key *key) {
     int result;
-    /* combine all inputs in some way */
     result = key->i * key->i + (key->p1.x * key->p1.x) - (key->p2.x * key->p2.x)
-    /* make sure result isn't out of bounds of the array */
     return (result % SIZE_OF_MAP);
 }
