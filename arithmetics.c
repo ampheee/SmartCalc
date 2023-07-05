@@ -7,13 +7,23 @@ int eval_expression(const gchar *expression) {
 //realize: dijkstra polish notation
 //output error or result
 
-// int popL(LStack *stack) {
-//     return 0;
-// }
 
-// int backL(L) {
-//     return 0;
-// }
+int pushToStack() {
+
+    return 0;
+}
+
+int popFromStack() {
+
+    return 0;
+}
+
+
+int *toPostFix(char *resulst, char *evaluation) { 
+    char *res;
+}
+
+
 
 int get_hash(Key *key) {
     int result;
