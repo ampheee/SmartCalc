@@ -1,26 +1,28 @@
-#ifndef _SMARTCALC_ARITHMETICS_H_
-#define _SMARTCALC_ARITHMETICS_H_
+#ifndef SMARTCALC_ARITHMETICS_H_
+#define SMARTCALC_ARITHMETICS_H_
 
 #include "calculator.h"
 
-#define MAP_SIZE 6
+#define SUCCESS 1
+#define FAIL 0
+#define ERROR bool
+
+typedef struct Token {
+    char spec;
+    unsigned int width;
+} Token;
 
 typedef struct Node {
     char L;
-    LStack *next;
-} LStack;
+    struct Node *next;
+} Node;
 
-struct Priority {
-    struct key key;
-    struct Value value;
-};
+typedef struct Stack {
+    unsigned int size;
+    Node *tail;
+} Stack;
 
-struct Key {
-    struct point p1;
-    struct point p2;
-    int i;
-    int j;
-}
+ERROR parse_num_string(unsigned char **result, char **eval);
 
 
 //todo: реализовать стек
@@ -29,4 +31,4 @@ struct Key {
 //todo - подсчет и вывод результата/ошибки
 //todo - построение и привязка графиков
 //todo - кредитные калькуляторы.
-#endif //_SMARTCALC_ARITHMETICS_H_
+#endif //SMARTCALC_ARITHMETICS_H_

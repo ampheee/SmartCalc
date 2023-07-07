@@ -30,11 +30,11 @@ int main(int argc, char **argv) {
         for (col = 0; col < 4; col++) {
             GtkWidget *button = gtk_button_new_with_label(digits[i]);
             gtk_grid_attach(GTK_GRID(grid), button, col, row, 1, 1);
-            // Подключение обработчиков событий к кнопкам
             if (i < 14) {
                 g_signal_connect(button, "clicked", G_CALLBACK(on_digit_button_clicked), entry);
             } else if (i == 14) {
                 g_signal_connect(button, "clicked", G_CALLBACK(on_equal_button_clicked), entry);
+//                g_signal_connect
             } else {
                 g_signal_connect(button, "clicked", G_CALLBACK(on_clear_button_clicked), entry);
             }
