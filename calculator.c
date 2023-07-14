@@ -1,11 +1,12 @@
 #include "calculator.h"
 
+#define UNUSED(expr) (void)(expr)
 // Функция-обработчик для кнопок-цифр
 int main(int argc, char **argv) {
     gtk_init(&argc, &argv);
     GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(window), "SmartCalc");
-    gtk_window_set_default_size(GTK_WINDOW(window), 250, 200);
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);
     gtk_container_set_border_width(GTK_CONTAINER(window), 10);
     g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     // Создание вертикального контейнера
@@ -34,7 +35,6 @@ int main(int argc, char **argv) {
                 g_signal_connect(button, "clicked", G_CALLBACK(on_digit_button_clicked), entry);
             } else if (i == 14) {
                 g_signal_connect(button, "clicked", G_CALLBACK(on_equal_button_clicked), entry);
-//                g_signal_connect
             } else {
                 g_signal_connect(button, "clicked", G_CALLBACK(on_clear_button_clicked), entry);
             }

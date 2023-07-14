@@ -1,34 +1,24 @@
-#ifndef SMARTCALC_ARITHMETICS_H_
-#define SMARTCALC_ARITHMETICS_H_
+#ifndef SRC_CALC_H_
+#define SRC_CALC_H_
 
-#include "calculator.h"
+#include "stack.h"
+#include <math.h>
+#include <stdio.h>
 
-#define SUCCESS 1
-#define FAIL 0
-#define ERROR bool
+#define MODE 'm'
 
-typedef struct Token {
-    char spec;
-    unsigned int width;
-} Token;
+#define COS 'c'
+#define SIN 's'
+#define TAN 't'
+#define ACOS 'C'
+#define ASIN 'S'
+#define ATAN 'T'
+#define SQRT 'q'
+#define LN 'l'
+#define LOG 'L'
 
-typedef struct Node {
-    char L;
-    struct Node *next;
-} Node;
+double calculate(que* exp, double x);
+double calculate_nums(double num1, double num2, char op);
+double calculate_func(double value, char op);
 
-typedef struct Stack {
-    unsigned int size;
-    Node *tail;
-} Stack;
-
-ERROR parse_num_string(unsigned char **result, char **eval);
-
-
-//todo: реализовать стек
-//todo - в постфиксную запись
-//todo - в обратную польскую нотацию
-//todo - подсчет и вывод результата/ошибки
-//todo - построение и привязка графиков
-//todo - кредитные калькуляторы.
-#endif //SMARTCALC_ARITHMETICS_H_
+#endif /* SRC_CALC_H_ */

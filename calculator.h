@@ -5,9 +5,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <sys/types.h>
 
-#include "arithmetics.h"
+
+#include "parse.h"
 #include "interface.h"
+#include "arithmetics.h"
+#include "stack.h"
 
 
 #endif  // SMARTCALC_CALCULATOR_H_
