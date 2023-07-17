@@ -1,4 +1,3 @@
-
 #ifndef SMARTCALC_DEBUG_H
 #define SMARTCALC_DEBUG_H
 

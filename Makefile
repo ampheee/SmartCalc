@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named SimpleCalculator
+# Target rules for targets named SmartCalc
 
 # Build rule for target.
-SimpleCalculator: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SimpleCalculator
-.PHONY : SimpleCalculator
+SmartCalc: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SmartCalc
+.PHONY : SmartCalc
 
 # fast build rule for target.
-SimpleCalculator/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/build
-.PHONY : SimpleCalculator/fast
+SmartCalc/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/build
+.PHONY : SmartCalc/fast
 
 arithmetics.o: arithmetics.c.o
 .PHONY : arithmetics.o
 
 # target to build an object file
 arithmetics.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/arithmetics.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/arithmetics.c.o
 .PHONY : arithmetics.c.o
 
 arithmetics.i: arithmetics.c.i
@@ -142,7 +142,7 @@ arithmetics.i: arithmetics.c.i
 
 # target to preprocess a source file
 arithmetics.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/arithmetics.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/arithmetics.c.i
 .PHONY : arithmetics.c.i
 
 arithmetics.s: arithmetics.c.s
@@ -150,7 +150,7 @@ arithmetics.s: arithmetics.c.s
 
 # target to generate assembly for a file
 arithmetics.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/arithmetics.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/arithmetics.c.s
 .PHONY : arithmetics.c.s
 
 calculator.o: calculator.c.o
@@ -158,7 +158,7 @@ calculator.o: calculator.c.o
 
 # target to build an object file
 calculator.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/calculator.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/calculator.c.o
 .PHONY : calculator.c.o
 
 calculator.i: calculator.c.i
@@ -166,7 +166,7 @@ calculator.i: calculator.c.i
 
 # target to preprocess a source file
 calculator.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/calculator.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/calculator.c.i
 .PHONY : calculator.c.i
 
 calculator.s: calculator.c.s
@@ -174,15 +174,39 @@ calculator.s: calculator.c.s
 
 # target to generate assembly for a file
 calculator.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/calculator.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/calculator.c.s
 .PHONY : calculator.c.s
+
+debug.o: debug.c.o
+.PHONY : debug.o
+
+# target to build an object file
+debug.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/debug.c.o
+.PHONY : debug.c.o
+
+debug.i: debug.c.i
+.PHONY : debug.i
+
+# target to preprocess a source file
+debug.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/debug.c.i
+.PHONY : debug.c.i
+
+debug.s: debug.c.s
+.PHONY : debug.s
+
+# target to generate assembly for a file
+debug.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/debug.c.s
+.PHONY : debug.c.s
 
 interface.o: interface.c.o
 .PHONY : interface.o
 
 # target to build an object file
 interface.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/interface.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/interface.c.o
 .PHONY : interface.c.o
 
 interface.i: interface.c.i
@@ -190,7 +214,7 @@ interface.i: interface.c.i
 
 # target to preprocess a source file
 interface.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/interface.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/interface.c.i
 .PHONY : interface.c.i
 
 interface.s: interface.c.s
@@ -198,8 +222,80 @@ interface.s: interface.c.s
 
 # target to generate assembly for a file
 interface.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/SimpleCalculator.dir/build.make CMakeFiles/SimpleCalculator.dir/interface.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/interface.c.s
 .PHONY : interface.c.s
+
+parse.o: parse.c.o
+.PHONY : parse.o
+
+# target to build an object file
+parse.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/parse.c.o
+.PHONY : parse.c.o
+
+parse.i: parse.c.i
+.PHONY : parse.i
+
+# target to preprocess a source file
+parse.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/parse.c.i
+.PHONY : parse.c.i
+
+parse.s: parse.c.s
+.PHONY : parse.s
+
+# target to generate assembly for a file
+parse.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/parse.c.s
+.PHONY : parse.c.s
+
+queue.o: queue.c.o
+.PHONY : queue.o
+
+# target to build an object file
+queue.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/queue.c.o
+.PHONY : queue.c.o
+
+queue.i: queue.c.i
+.PHONY : queue.i
+
+# target to preprocess a source file
+queue.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/queue.c.i
+.PHONY : queue.c.i
+
+queue.s: queue.c.s
+.PHONY : queue.s
+
+# target to generate assembly for a file
+queue.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/queue.c.s
+.PHONY : queue.c.s
+
+stack.o: stack.c.o
+.PHONY : stack.o
+
+# target to build an object file
+stack.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/stack.c.o
+.PHONY : stack.c.o
+
+stack.i: stack.c.i
+.PHONY : stack.i
+
+# target to preprocess a source file
+stack.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/stack.c.i
+.PHONY : stack.c.i
+
+stack.s: stack.c.s
+.PHONY : stack.s
+
+# target to generate assembly for a file
+stack.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/stack.c.s
+.PHONY : stack.c.s
 
 # Help Target
 help:
@@ -209,16 +305,28 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... SimpleCalculator"
+	@echo "... SmartCalc"
 	@echo "... arithmetics.o"
 	@echo "... arithmetics.i"
 	@echo "... arithmetics.s"
 	@echo "... calculator.o"
 	@echo "... calculator.i"
 	@echo "... calculator.s"
+	@echo "... debug.o"
+	@echo "... debug.i"
+	@echo "... debug.s"
 	@echo "... interface.o"
 	@echo "... interface.i"
 	@echo "... interface.s"
+	@echo "... parse.o"
+	@echo "... parse.i"
+	@echo "... parse.s"
+	@echo "... queue.o"
+	@echo "... queue.i"
+	@echo "... queue.s"
+	@echo "... stack.o"
+	@echo "... stack.i"
+	@echo "... stack.s"
 .PHONY : help
 
 

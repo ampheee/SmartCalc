@@ -2,6 +2,7 @@
 #define SRC_CALC_H_
 
 #include "stack.h"
+#include "queue.h"
 #include <math.h>
 #include <stdio.h>
 
@@ -17,7 +18,7 @@
 #define LN 'l'
 #define LOG 'L'
 
-double calculate(que* exp, double x);
+double calculate(Queue* exp, double x);
 double calculate_nums(double num1, double num2, char op);
 double calculate_func(double value, char op);
 

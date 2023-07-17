@@ -6,15 +6,15 @@ Stack *stack_init() {
         stack->size = 0;
         stack->tail = NULL;
     } else {
-        printf(STACK_ALLOCATE_ERROR);
+        printf(STACK_MEMORY_ALLOCATE_ERROR);
     }
-    return stack
+    return stack;
 }
 Lexeme *stack_pop(Stack *stack) {
     Lexeme *result = NULL;
     if (stack != NULL && stack->size > 0) {
-        Node *popped = stack->tail;
-        stack.tail = stack->tail->next;
+        StackNode *popped = stack->tail;
+        stack->tail = stack->tail->next;
         result = popped->lex;
         stack->size--;
         free(popped);
@@ -38,7 +38,7 @@ void stack_free(Stack *stack) {
     if (stack != NULL) {
         while (stack->tail != NULL && stack->size > 0) {
             stack->size--;
-            Node *trash = stack->tail;
+            StackNode *trash = stack->tail;
             stack->tail = stack->tail->next;
             free(trash->lex);
             free(trash);
@@ -50,18 +50,18 @@ void stack_free(Stack *stack) {
 }
 void stack_push(Stack *stack, Lexeme *new_lexeme) {
     if (stack != NULL) {
-        Node *new_node = (Node *) calloc(1, sizeof(Node));
+        StackNode *new_node = (StackNode *) calloc(1, sizeof(StackNode));
         if (new_node != NULL && new_lexeme != NULL) {
             new_node->lex = new_lexeme;
             if (stack->size > 0) {
-                Node *prev = stack->tail;
+                StackNode *prev = stack->tail;
                 stack->tail = new_node;
-                stack->tail.next = prev;
+                stack->tail->next = prev;
             } else if (stack->size == 0) {
                 stack->tail = new_node;
             }
         } else if (new_node == NULL) {
-            printf(STACK_NEW_NODE_IS_NULL_ERROR);
+            printf(STACK_NEW_NODE_ALLOCATE_ERROR);
         } else if (new_lexeme == NULL) {
             printf(STACK_NEW_LEXEME_IS_NULL_ERROR);
         }

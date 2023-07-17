@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.2)
-project(SimpleCalculator)
+project(SmartCalc)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
@@ -11,5 +11,7 @@ link_directories(${GTK3_LIBRARY_DIRS})
 
 add_definitions(${GTK3_CFLAGS_OTHER})
 
-add_executable(SimpleCalculator calculator.c calculator.h arithmetics.c interface.c)
-target_link_libraries(SimpleCalculator ${GTK3_LIBRARIES})
+add_executable(SmartCalc stack.c queue.c
+        parse.c arithmetics.c debug.c
+        interface.c calculator.c)
+target_link_libraries(SmartCalc -lm ${GTK3_LIBRARIES})

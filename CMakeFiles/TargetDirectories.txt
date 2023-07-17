@@ -1,0 +1,3 @@
+/home/ampheee/github/SmartCalc/CMakeFiles/SmartCalc.dir
+/home/ampheee/github/SmartCalc/CMakeFiles/edit_cache.dir
+/home/ampheee/github/SmartCalc/CMakeFiles/rebuild_cache.dir
