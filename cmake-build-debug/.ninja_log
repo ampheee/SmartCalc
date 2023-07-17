@@ -1,9 +1,0 @@
-# ninja log v5
-1	247	1688754399025308846	CMakeFiles/SimpleCalculator.dir/interface.c.o	c528ad368339eee8
-0	252	1688754399029308857	CMakeFiles/SimpleCalculator.dir/calculator.c.o	2814ed4439abf8c6
-0	255	1688754399033308868	CMakeFiles/SimpleCalculator.dir/arithmetics.c.o	754630e287ee852c
-255	353	1688754399129309123	SimpleCalculator	9f59b2adfbc62146
-2	238	1688754464797485864	CMakeFiles/SimpleCalculator.dir/interface.c.o	c528ad368339eee8
-238	321	1688754464877486081	SimpleCalculator	9f59b2adfbc62146
-1	256	1688754542261698824	CMakeFiles/SimpleCalculator.dir/arithmetics.c.o	754630e287ee852c
-256	348	1688754542349699068	SimpleCalculator	9f59b2adfbc62146
