@@ -20,11 +20,11 @@ void on_equal_button_clicked(GtkButton *button, gpointer user_data) {
     const gchar *current_text = gtk_entry_get_text(entry);
     g_print("%s\n", current_text);
     snprintf(input, sizeof(input), "%s", current_text);
-    printf("%s", current_text);
-    Queue* que = queue_init();
-    if (str_to_polish(input, &que)) {
+    Queue *res;
+    if (str_to_polish(input, &res)) {
         // double result = calculate(qu, 0);
     }
-    queue_free(que);
+    print_queue(res);
+    // queue_free(res);
     // g_free(current_text);
 }

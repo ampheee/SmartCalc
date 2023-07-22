@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #define SUCCESS 1
 #define FAIL (-1)

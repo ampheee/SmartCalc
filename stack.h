@@ -10,7 +10,7 @@
 #define STACK_NEW_NODE_ALLOCATE_ERROR "stack new_node allocate error\n"
 #define STACK_MEMORY_ALLOCATE_ERROR "stack allocate error\n"
 #define STACK_IS_EMPTY_ERROR "stack is empty error\n"
-#define LEXEME_MEMORY_ALLOCATE_ERROR
+#define LEXEME_MEMORY_ALLOCATE_ERROR "lexeme memory allocate error\n"
 
 enum Type { NUMBER, OPERATOR, FUNCTION, BRACKET, UNDEFINED };
 

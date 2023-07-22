@@ -13,17 +13,17 @@
 typedef struct QueNode {
     Lexeme *lex;
     struct QueNode *next;
-    struct QueNode *prev;
 } QueNode;
 
 typedef struct Queue {
     int size;
+    QueNode *head;
     QueNode *tail;
 } Queue;
 
 Queue *queue_init();
-Lexeme *queue_pop(Queue *New);
-Lexeme *queue_seek(Queue *New);
+Lexeme *queue_pop(Queue *queue);
+Lexeme *queue_seek(Queue *queue);
 void queue_push(Queue *queue, Lexeme *New);
 void queue_free(Queue *queue);
 int queue_add_new_lex(Queue *queue, Lexeme new_value);

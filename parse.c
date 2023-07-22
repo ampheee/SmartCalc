@@ -12,7 +12,7 @@ bool isBasedDigit(char c, int b) {
 }
 
 bool isExp(char **sptr, int *e) {
-    bool res = false;
+    int result = FAIL;
     if (**sptr == 'e' || **sptr == 'E') {
         bool isNegative = 0;
         (*sptr)++;
@@ -29,9 +29,9 @@ bool isExp(char **sptr, int *e) {
         if (isNegative) {
             *e *= -1;
         }
-        res = true;
+        result = SUCCESS;
     }
-    return res;
+    return result;
 }
 
 double s21_atof(char **sptr, size_t *numsCount) {
@@ -79,40 +79,42 @@ double s21_atof(char **sptr, size_t *numsCount) {
 }
 
 int parse_num(char **str, double *result) {
-    bool status = FAIL;
+    bool Status = FAIL;
     size_t nums_count = 0;
     *result = s21_atof(str, &nums_count);
     if (nums_count != 0) {
-        status = SUCCESS;
+        Status = SUCCESS;
     }
-    return status;
+    return Status;
 }
 
 int parse_func(char **str, unsigned char *result) {
-    int status = FAIL;
+    int Status = FAIL;
      if (strstr(*str, "cos") == *str || strstr(*str, "sin") == *str ||
         strstr(*str, "tan") == *str || strstr(*str, "ln") == *str) {
         (*str) += 3;
         *result = (*str)[0];
         if (*result == 'l') (*str)--;
+        Status = SUCCESS;
     }
-    if ((status == FAIL) &&
+    if ((Status == FAIL) &&
         (strstr(*str, "acos") == *str || strstr(*str, "asin") == *str ||
          strstr(*str, "atan") == *str || strstr(*str, "sqrt") == *str)) {
         (*str) += 4;
         *result = (*str)[1];
         if ((*str)[1] != 'q') *result -= 32;
+        Status = SUCCESS;
     }
-    if ((status == FAIL) && strstr(*str, "log") == *str) {
+    if ((Status == FAIL) && strstr(*str, "log") == *str) {
         (*str) += 3;
         *result = 'L';
+        Status = SUCCESS;
     }
-    return status;
+    return Status;
 }
 
 int parse_operator(char **str, unsigned char *result) {
-    int status = SUCCESS;
-    printf("in function: %s\n", *str);
+    int Status = SUCCESS;
     if (strstr(*str, "+") == *str) {
         *result = '+';
     } else if (strstr(*str, "-") == *str) {
@@ -126,35 +128,102 @@ int parse_operator(char **str, unsigned char *result) {
     } else if (strstr(*str, "mod") == *str) {
         *result = 'm';
     } else {
-        status = FAIL;
+        Status = FAIL;
     }
-    if (status == SUCCESS) {
+    if (Status == SUCCESS) {
         (*str)++;
         if (*result == 'm') {
             (*str) += 2;
         }
     }
-    return status;
+    return Status;
+}
+
+int parse_bracket(char **str, unsigned char *result) {
+    int Status = FAIL;
+    if (strstr(*str, "(") == *str || strstr(*str, ")") == *str) {
+        *result = **str;
+        Status = SUCCESS;
+        (*str)++;
+    }
+    return Status;
+}
+
+void remove_spaces(char **str) {
+    while (**str && (**str == ' ' || **str == '\t' || **str == '\n')) {
+        (*str)++;
+    }
+}
+
+int get_priority(char operator) {
+    int result = -1;
+    if (operator == '+' || operator == '-') {
+        result = 1;
+    } else if (operator == '*' || operator == '/' || 
+        operator == 'm' || strchr("cstCSTqlL", operator) != NULL) {
+        result = 2;
+    } else if (operator == '^') {
+        result = 3;
+    }
+}
+
+int is_op2_priority_higher_or_equal(char op1, char op2) {
+    int Status = FAIL;
+    int priority_op1 = get_priority(op1);
+    int priority_op2 = get_priority(op2);
+    if (priority_op1 > 0 && priority_op2 > 0 && 
+        priority_op2 >= priority_op1) {
+            Status = priority_op2;
+        }
+    return Status;
 }
 
 int str_to_polish(char *str, Queue **res) {
     Stack *stack = stack_init();
-    int status = SUCCESS;
+    *res = queue_init();
+    int Status = SUCCESS;
     size_t len = strlen(str);
-    printf("\nstart while cycle in str sizeof %lu chars\n", len);
-    while (*str && status == SUCCESS) {
+    while (*str && Status == SUCCESS) {
+        remove_spaces(&str);
         Lexeme *lex = (Lexeme *) calloc (1, sizeof(Lexeme));
         if (isBasedDigit(*str, 10)) {
             double result = 1;
-            status = parse_num(&str, &result);
+            Status = parse_num(&str, &result);
             lex->type = NUMBER;
             lex->num = result;
-        } else if (parse_operator(&str, &lex->chr)) {
+            queue_push(*res, lex);
+;        } else if (parse_operator(&str, &lex->chr) == SUCCESS) {
             lex->type = OPERATOR;
-        } else if (parse_func(&str, &lex->chr)) {
+        } else if (parse_func(&str, &lex->chr) == SUCCESS) {
             lex->type = FUNCTION;
+        } else if (parse_bracket(&str, &lex->chr) == SUCCESS) {
+            lex->type = BRACKET;
+        } else {
+            Status = FAIL;
         }
-        printf("check: lextype - %d, lexchar - %c, lexnum - %lf\n", lex->type, lex->chr, lex->num);
+        // queue_push(*res, lex);
+        if (Status == SUCCESS && lex->type != NUMBER) {
+            while (stack->size > 0) {
+                Lexeme *seeked = stack_seek(stack);
+                if (is_op2_priority_higher_or_equal(seeked->chr, lex->chr) == FAIL) {
+                    stack_push(stack, lex);
+                    break;
+                }
+                Lexeme *popped = stack_pop(stack);
+                queue_push(*res, popped);
+                free(popped);
+            }
+            if (stack->size == 0) {
+                stack_push(stack, lex);
+            }
+        }
+        if (Status == FAIL) free(lex);
     }
-    return status;
+    while (stack->size != 0) {
+        Lexeme *popped = stack_pop(stack);
+        queue_push(*res, popped);
+    }
+    print_stack(stack);
+    free(stack);
+    return Status;
 }
