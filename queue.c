@@ -42,16 +42,16 @@ Lexeme *queue_seek(Queue *queue) {
 }
 void queue_push(Queue *queue, Lexeme *new_lexeme) {
     if (queue != NULL) {
-        QueNode *new_node = (QueNode *) calloc (1, sizeof(QueNode));
-        if (new_node != NULL && new_lexeme != NULL) {
+        QueNode *new_node = malloc(sizeof(QueNode));
+        if (new_node != NULL) {
             new_node->lex = new_lexeme;
             new_node->next = NULL;
-            if (queue->size == 0) {
+            if (queue->tail == NULL) {
                 queue->head = new_node;
                 queue->tail = new_node;
-            } else if (queue->size > 0) {
+            } else {
                 queue->tail->next = new_node;
-                queue->tail = queue->tail->next;
+                queue->tail = new_node;
             }
             queue->size++;
         } else if (new_node == NULL) {

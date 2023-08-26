@@ -79,11 +79,13 @@ double s21_atof(char **sptr, size_t *numsCount) {
 }
 
 int parse_num(char **str, double *result) {
-    bool Status = FAIL;
-    size_t nums_count = 0;
-    *result = s21_atof(str, &nums_count);
-    if (nums_count != 0) {
-        Status = SUCCESS;
+    int Status = FAIL;
+    if (isBasedDigit(**str, 10) == true) {
+        size_t nums_count = 0;
+        *result = s21_atof(str, &nums_count);
+        if (nums_count != 0) {
+            Status = SUCCESS;
+        }
     }
     return Status;
 }
@@ -92,16 +94,16 @@ int parse_func(char **str, unsigned char *result) {
     int Status = FAIL;
      if (strstr(*str, "cos") == *str || strstr(*str, "sin") == *str ||
         strstr(*str, "tan") == *str || strstr(*str, "ln") == *str) {
-        (*str) += 3;
         *result = (*str)[0];
+        (*str) += 3;
         if (*result == 'l') (*str)--;
         Status = SUCCESS;
     }
     if ((Status == FAIL) &&
         (strstr(*str, "acos") == *str || strstr(*str, "asin") == *str ||
          strstr(*str, "atan") == *str || strstr(*str, "sqrt") == *str)) {
-        (*str) += 4;
         *result = (*str)[1];
+        (*str) += 4;
         if ((*str)[1] != 'q') *result -= 32;
         Status = SUCCESS;
     }
@@ -165,65 +167,73 @@ int get_priority(char operator) {
     } else if (operator == '^') {
         result = 3;
     }
+    return result;
 }
 
-int is_op2_priority_higher_or_equal(char op1, char op2) {
+int check_priority(char op1, char op2) {
     int Status = FAIL;
     int priority_op1 = get_priority(op1);
     int priority_op2 = get_priority(op2);
     if (priority_op1 > 0 && priority_op2 > 0 && 
-        priority_op2 >= priority_op1) {
-            Status = priority_op2;
+        priority_op2 <= priority_op1) {
+            Status = SUCCESS;
         }
     return Status;
 }
 
 int str_to_polish(char *str, Queue **res) {
     Stack *stack = stack_init();
-    *res = queue_init();
     int Status = SUCCESS;
     size_t len = strlen(str);
+    double result = 1;
     while (*str && Status == SUCCESS) {
         remove_spaces(&str);
         Lexeme *lex = (Lexeme *) calloc (1, sizeof(Lexeme));
-        if (isBasedDigit(*str, 10)) {
-            double result = 1;
-            Status = parse_num(&str, &result);
+        lex->type = UNDEFINED;
+        if (parse_num(&str, &result) == SUCCESS) {
             lex->type = NUMBER;
             lex->num = result;
             queue_push(*res, lex);
-;        } else if (parse_operator(&str, &lex->chr) == SUCCESS) {
-            lex->type = OPERATOR;
+        } else if (parse_operator(&str, &lex->chr) == SUCCESS) {
+          lex->num = 0;
+          lex->type = OPERATOR;
+          Lexeme *seeked = stack_seek(stack);
+          while (stack->size > 0 && (seeked->type == OPERATOR || seeked->type == FUNCTION)) {
+              if (check_priority(seeked->chr, lex->chr) == SUCCESS) {
+                      queue_push(*res, stack_pop(stack));
+              } else { 
+                break;
+              }
+            }
+            stack_push(stack, lex);
+        } else if (Status == parse_bracket(&str, &lex->chr) == SUCCESS) {
+            lex->type = BRACKET;
+            if (lex->chr == '(') {
+                stack_push(stack, lex);
+            } else if (lex->chr == ')') {
+                if (stack->size <= 0) {
+                    Status = FAIL;
+                    break;
+                } else {
+                    Lexeme *seeked = stack_seek(stack);
+                    while (stack->size > 0 && seeked->chr != '(') {
+                        seeked = stack_seek(stack);
+                        // printf("stack char now: %c\n", stack->tail->lex->chr);
+                        queue_push(*res, stack_pop(stack));
+                    }
+                }
+            }
         } else if (parse_func(&str, &lex->chr) == SUCCESS) {
             lex->type = FUNCTION;
-        } else if (parse_bracket(&str, &lex->chr) == SUCCESS) {
-            lex->type = BRACKET;
-        } else {
-            Status = FAIL;
+            stack_push(stack, lex);
         }
-        // queue_push(*res, lex);
-        if (Status == SUCCESS && lex->type != NUMBER) {
-            while (stack->size > 0) {
-                Lexeme *seeked = stack_seek(stack);
-                if (is_op2_priority_higher_or_equal(seeked->chr, lex->chr) == FAIL) {
-                    stack_push(stack, lex);
-                    break;
-                }
-                Lexeme *popped = stack_pop(stack);
-                queue_push(*res, popped);
-                free(popped);
-            }
-            if (stack->size == 0) {
-                stack_push(stack, lex);
-            }
-        }
-        if (Status == FAIL) free(lex);
+        // printf("stack char now: %c\n", stack->tail->lex->chr);
+        if (lex->type == UNDEFINED || Status == FAIL) free(lex);
     }
-    while (stack->size != 0) {
-        Lexeme *popped = stack_pop(stack);
-        queue_push(*res, popped);
+    while (stack->size > 0) {
+        queue_push(*res, stack_pop(stack));
     }
-    print_stack(stack);
+    // print_stack(stack);
     free(stack);
     return Status;
 }

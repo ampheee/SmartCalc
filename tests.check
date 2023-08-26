@@ -1,0 +1,57 @@
+#include "parse.h"
+
+#test str_to_polish_test0
+Queue *res_que = queue_init();
+ck_assert_ptr_nonnull(res_que);
+char *str = "14+1";
+char *str1 = "124/12";
+char *str2 = "1234^2-31";
+char *str3 = "124.12 * 39.1";
+ck_assert_int_eq(str_to_polish(str, &res_que), SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str1, &res_que), SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str2, &res_que), SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str3, &res_que), SUCCESS);
+queue_free(res_que);
+
+#test str_to_polish_test1
+#test str_to_polish_test2
+#test str_to_polish_test3
+#test str_to_polish_test4
+#test str_to_polish_test5
+#test str_to_polish_test6
+#test str_to_polish_test7
+#test str_to_polish_test8
+#test str_to_polish_test9
+
+#test parse_num_test0
+#test parse_num_test1
+#test parse_num_test2
+#test parse_num_test3
+#test parse_num_test4
+#test parse_num_test5
+#test parse_num_test6
+#test parse_num_test7
+#test parse_num_test8
+#test parse_num_test9
+
+#test parse_func_test0
+#test parse_func_test1
+#test parse_func_test2
+#test parse_func_test3
+#test parse_func_test4
+#test parse_func_test5
+#test parse_func_test6
+#test parse_func_test7
+#test parse_func_test8
+#test parse_func_test9
+
+#test parse_operator_test0
+#test parse_operator_test1
+#test parse_operator_test2
+#test parse_operator_test3
+#test parse_operator_test4
+#test parse_operator_test5
+

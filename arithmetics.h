@@ -21,5 +21,6 @@
 double calculate(Queue* exp, double x);
 double calculate_nums(double num1, double num2, char op);
 double calculate_func(double value, char op);
+double to_radians(double x);
 
 #endif /* SRC_CALC_H_ */
