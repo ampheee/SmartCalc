@@ -20,7 +20,7 @@ Lexeme *queue_pop(Queue *queue) {
             queue->head = queue->head->next;
             free(popped_node);
         } else {
-            printf(QUEUE_IS_EMPTY_ERROR);
+            // printf(QUEUE_IS_EMPTY_ERROR);
         }
     } else {
         printf(QUEUE_IS_NULL_ERROR);
@@ -65,12 +65,11 @@ void queue_push(Queue *queue, Lexeme *new_lexeme) {
     }
 }
 void queue_free(Queue *queue) {
-    if (queue != NULL) {
-        while (queue->head != queue->tail && queue->size != 0) {
-            queue_pop(queue);
-        }
-    } else {
-        printf(QUEUE_IS_NULL_ERROR);
+    while (queue->head != NULL) {
+        Lexeme *lex = queue_pop(queue);
+        free(lex);
     }
+    free(queue_pop(queue));
+    queue->tail = NULL;
+    // free(queue);
 }
-int queue_add_new_lex(Queue *queue, Lexeme new_value);

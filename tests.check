@@ -11,14 +11,15 @@
 #define CASE_180  180
 #define CASE_360  360
 
-
+//parse fail
 #test str_to_polish_test0
 Queue *res_que = queue_init();
 ck_assert_ptr_nonnull(res_que);
-char *str = "14+1";
+char *str  = "14+1";
 char *str1 = "124/12";
 char *str2 = "1234^2-31";
 char *str3 = "124.12 * 39.1";
+char *str4 = "((sin(30) * cos(sin(30))) * 200 + (10 * 50) ^ 2 - ((55 ^ 2) - cos(40) * 15) * lg(50))";
 ck_assert_int_eq(str_to_polish(str, &res_que), SUCCESS);
 queue_free(res_que);
 ck_assert_int_eq(str_to_polish(str1, &res_que), SUCCESS);
@@ -27,16 +28,21 @@ ck_assert_int_eq(str_to_polish(str2, &res_que), SUCCESS);
 queue_free(res_que);
 ck_assert_int_eq(str_to_polish(str3, &res_que), SUCCESS);
 queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str4, &res_que), SUCCESS);
+print_queue(res_que);
 
+//parse fail
 #test str_to_polish_test1
+Queue *res_que = queue_init();
+ck_assert_ptr_nonnull(res_que);
+char *str0 = "+143*32";
+ck_assert_int_eq(str_to_polish(str0, &res_que), FAIL);
+
+
 #test str_to_polish_test2
 #test str_to_polish_test3
 #test str_to_polish_test4
 #test str_to_polish_test5
-#test str_to_polish_test6
-#test str_to_polish_test7
-#test str_to_polish_test8
-#test str_to_polish_test9
 
 #test parse_num_test0
 #test parse_num_test1
@@ -44,10 +50,6 @@ queue_free(res_que);
 #test parse_num_test3
 #test parse_num_test4
 #test parse_num_test5
-#test parse_num_test6
-#test parse_num_test7
-#test parse_num_test8
-#test parse_num_test9
 
 #test parse_func_test0
 #test parse_func_test1
@@ -55,10 +57,6 @@ queue_free(res_que);
 #test parse_func_test3
 #test parse_func_test4
 #test parse_func_test5
-#test parse_func_test6
-#test parse_func_test7
-#test parse_func_test8
-#test parse_func_test9
 
 #test parse_operator_test0
 #test parse_operator_test1
@@ -71,102 +69,186 @@ queue_free(res_que);
 for (int i = 0; i < 100; i++) {
   ck_assert_float_eq_tol(to_radians(i), 0.0174533 * i, TOL);
 }
-ck_assert_float_eq_tol(to_radians(CASE_30), 0.523599, TOL);
-ck_assert_float_eq_tol(to_radians(CASE_60), 1.0472, TOL);
-ck_assert_float_eq_tol(to_radians(CASE_90), 1.5708, TOL);
-ck_assert_float_eq_tol(to_radians(CASE_180), 3.14159, TOL);
-ck_assert_float_eq_tol(to_radians(CASE_360), 6.28319, TOL);
+
+#test calculate_test0
+Queue *res_que = queue_init();
+ck_assert_ptr_nonnull(res_que);
+int Status = SUCCESS;
+char *str0 = "14+1";
+char *str1 = "124/12";
+char *str2 = "1234^2-31";
+char *str3 = "124.12 * 39.1";
+char *str4 = "12451251/214*(sin(ln(50)) - cos(asin(0.5)))";
+char *str5 = "((sin(30) * cos(sin(30))) * 200 + (10 * 50) ^ 2 - ((55 ^ 2) - cos(40) * 15) * log(50))";
+ck_assert_int_eq(str_to_polish(str0, &res_que), SUCCESS);
+ck_assert_float_eq_tol(calculate(res_que, 0, &Status), 15, TOL);
+ck_assert_int_eq(Status, SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str1, &res_que), SUCCESS);
+ck_assert_float_eq_tol(calculate(res_que, 0, &Status), 10.333333, TOL);
+ck_assert_int_eq(Status, SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str2, &res_que), SUCCESS);
+ck_assert_float_eq_tol(calculate(res_que, 0, &Status), 1522725, TOL);
+ck_assert_int_eq(Status, SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str3, &res_que), SUCCESS);
+ck_assert_float_eq_tol(calculate(res_que, 0, &Status), 4853.092, TOL);
+ck_assert_int_eq(Status, SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str4, &res_que), SUCCESS);
+ck_assert_float_eq_tol(calculate(res_que, 0, &Status), -46418.7733868, TOL);
+ck_assert_int_eq(Status, SUCCESS);
+queue_free(res_que);
+ck_assert_int_eq(str_to_polish(str5, &res_que), SUCCESS);
+ck_assert_float_eq_tol(calculate(res_que, 0, &Status), 244980.134227, TOL);
+ck_assert_int_eq(Status, SUCCESS);
+queue_free(res_que);
+
+#test calculate_func_test1
+Queue *res_que = queue_init();
+ck_assert_ptr_nonnull(res_que);   
+char *str0 = "";
+char *str1 = "";
+char *str2 = "";
+char *str3 = "";
+char *str4 = "";
+char *str5 = "";
 
 #test calculate_func_cos
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'c'), 1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 'c'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 'c'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 'c'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'c'), -0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 'c'), -0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 'c'), -1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 'c'), 0.8571673007, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 'c'), -0.88294759289, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_0, 'c'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_30, 'c'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_60, 'c'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_90, 'c'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_120,'c'), -0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_150, 'c'), -0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_180, 'c'), -1, TOL);
+ck_assert_float_eq_tol(calculate_func(1111, 'c'), 0.8571673007, TOL);
+ck_assert_float_eq_tol(calculate_func(88888888, 'c'), -0.88294759289, TOL);
 
 #test calculate_func_sin
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0.51503807491, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_0, 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_30, 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_60, 's'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_90, 's'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_120,'s'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_150, 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_180, 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(1111, 's'), 0.51503807491, TOL);
+ck_assert_float_eq_tol(calculate_func(88888888, 's'), -0.46947156272, TOL);
 
 #test calculate_func_tan
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 't'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 't'), 0.57735026919, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 't'), 1.73205080757, TOL);
-// ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 't'), 1, TOL); //catch error
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'t'), -1.73205080757, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 't'), -0.57735026919, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 't'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 't'), 0.60086061902, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 't'), 0.53170943156, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_0, 't'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_30, 't'), 0.57735026919, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_60, 't'), 1.73205080757, TOL);
+// ck_assert_float_eq_tol(calculate_func(CASE_90, 't'), 1, TOL); //catch error
+ck_assert_float_eq_tol(calculate_func(CASE_120,'t'), -1.73205080757, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_150, 't'), -0.57735026919, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_180, 't'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(1111, 't'), 0.60086061902, TOL);
+ck_assert_float_eq_tol(calculate_func(88888888, 't'), 0.53170943156, TOL);
 
 #test calculate_func_acos
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'C'), 90, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(0.5), 'C'), 60, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_0, 'C'), 90, TOL);
+ck_assert_float_eq_tol(calculate_func(0.5, 'C'), 60, TOL);
 
 #test calculate_func_asin
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'S'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 'S'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_0, 'S'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(0.5, 'S'), 30, TOL);
+ck_assert_float_eq_tol(calculate_func(0.01, 'S'), 0.57296734485, TOL);
+ck_assert_float_eq_tol(calculate_func(0.0001, 'S'), 0.00572957796, TOL);
 
 #test calculate_func_atan
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'T'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 'T'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 'T'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 'T'), 1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'T'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 'T'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 'T'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 'T'), 0.51503807491, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 'T'), -0.46947156272, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_0, 'T'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_30, 'T'), 88.090847567, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_60, 'T'), 89.0451587461, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_90, 'T'), 89.363406424, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_120,'T'), 89.5225462227, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_150, 'T'), 89.6180337953, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_180, 'T'),  89.6816933885, TOL);
+ck_assert_float_eq_tol(calculate_func(1111, 'T'), 89.9484286552, TOL);
+ck_assert_float_eq_tol(calculate_func(88888888, 'T'), 89.9999993554, TOL);
 
 #test calculate_func_sqrt
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0.51503807491, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+ck_assert_float_eq_tol(calculate_func(400, 'q'), 20, TOL);
+ck_assert_float_eq_tol(calculate_func(250000, 'q'), 500, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_60, 'q'), 7.74596669241, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_90, 'q'), 9.48683298051, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_120,'q'), 10.9544511501, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_150, 'q'), 12.2474487139, TOL);
+ck_assert_float_eq_tol(calculate_func(CASE_180, 'q'), 13.416407865, TOL);
+ck_assert_float_eq_tol(calculate_func(1111, 'q'), 33.331666625, TOL);
+ck_assert_float_eq_tol(calculate_func(88888888, 'q'), 9428.09036868, TOL);
 
 #test calculate_func_log
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0 , TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+ck_assert_float_eq_tol(calculate_func(50, 'l'), 3.91202300543, TOL);
+ck_assert_float_eq_tol(calculate_func(100, 'l'), 4.60517018599, TOL);
+ck_assert_float_eq_tol(calculate_func(1000, 'l'), 6.90775527898, TOL);
+ck_assert_float_eq_tol(calculate_func(50000, 'l'), 10.8197782844, TOL);
+ck_assert_float_eq_tol(calculate_func(0.5,'l'), -0.69314718056, TOL);
+ck_assert_float_eq_tol(calculate_func(0.1, 'l'), -2.30258509299, TOL);
+ck_assert_float_eq_tol(calculate_func(0.05, 'l'), -2.99573227355, TOL);
+ck_assert_float_eq_tol(calculate_func(0.03, 'l'), -3.50655789732, TOL);
+ck_assert_float_eq_tol(calculate_func(0.0001, 'l'), -9.21034037198, TOL);
 
 #test calculate_func_log10
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0.51503807491, TOL);
-ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
-
+ck_assert_float_eq_tol(calculate_func(50, 'L'), 1.69897000434, TOL);
+ck_assert_float_eq_tol(calculate_func(100, 'L'), 2, TOL);
+ck_assert_float_eq_tol(calculate_func(1000, 'L'), 3, TOL);
+ck_assert_float_eq_tol(calculate_func(1000000, 'L'), 6, TOL);
+ck_assert_float_eq_tol(calculate_func(0.5,'L'),  -0.30102999566, TOL);
+ck_assert_float_eq_tol(calculate_func(0.1, 'L'), -1, TOL);
+ck_assert_float_eq_tol(calculate_func(0.01, 'L'), -2, TOL);
+ck_assert_float_eq_tol(calculate_func(0.001, 'L'), -3, TOL);
+ck_assert_float_eq_tol(calculate_func(0.00003, 'L'), -4.52287874528, TOL);
 
 #test calculate_nums_plus
+ck_assert_float_eq_tol(calculate_nums(0, 512, '+'), 512, TOL);
+ck_assert_float_eq_tol(calculate_nums(24, 95129.211, '+'), 95153.211, TOL);
+ck_assert_float_eq_tol(calculate_nums(219512924.211, 12591292.214195, '+'), 232104216.425, TOL);
+ck_assert_float_eq_tol(calculate_nums(-51212412, 51212412, '+'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(2412412, 0.211, '+'), 2412412.211, TOL);
+ck_assert_float_eq_tol(calculate_nums(24.21241241, 1252.21419512, '+'), 1276.42660753, TOL);
+
 #test calculate_nums_minus
+ck_assert_float_eq_tol(calculate_nums(0, 512, '-'), 512, TOL);
+ck_assert_float_eq_tol(calculate_nums(512, 0, '-'), -512, TOL);
+ck_assert_float_eq_tol(calculate_nums(24, 95214.11, '-'), 95190.11, TOL);
+ck_assert_float_eq_tol(calculate_nums(2192940.211, 2291292.2141951, '-'), 98352.0031951, TOL);
+ck_assert_float_eq_tol(calculate_nums(51212412, 51212412, '-'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(2412412, 0.211, '-'), -2412411.789, TOL);
+
 #test calculate_nums_multiply
+ck_assert_float_eq_tol(calculate_nums(0, 512, '*'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(512, 0, '*'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(24, 95214.11, '*'), 2285138.64, TOL);
+ck_assert_float_eq_tol(calculate_nums(2192940.211, 2291292.2141951, '*'), 5.0246668e+12, TOL);
+ck_assert_float_eq_tol(calculate_nums(51212412, 51, '*'),  2611833012, TOL);
+ck_assert_float_eq_tol(calculate_nums(2412412, -0.211, '*'), -509018.932, TOL);
+
 #test calculate_nums_div
+ck_assert_float_nan(calculate_nums(0, 512, '/'));
+ck_assert_float_eq_tol(calculate_nums(512, 0, '/'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(24, 95214.11, '/'), 3967.25458333, TOL);
+ck_assert_float_eq_tol(calculate_nums(2192940.211, 2291292.2141951, '/'), 1.04484937743, TOL);
+ck_assert_float_eq_tol(calculate_nums(51212412, 51212412, '/'), 1, TOL);
+ck_assert_float_eq_tol(calculate_nums(2412412, 0.211, '/'), 8.74643303e-8, TOL);
+
 #test calculate_nums_pow
+ck_assert_float_eq_tol(calculate_nums(0, 0, '^'), 1, TOL);
+ck_assert_float_eq_tol(calculate_nums(0, 512, '^'), 1, TOL);
+ck_assert_float_eq_tol(calculate_nums(512, 0, '^'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(17, 91.11, '^'),  2.0541057e+33, TOL);
+ck_assert_float_eq_tol(calculate_nums(0.211, 2291292.2141951, '^'), 21.97743383, TOL);
+ck_assert_float_eq_tol(calculate_nums(-1, 51212412, '^'), 1.952653e-8, TOL);
+ck_assert_float_eq_tol(calculate_nums(2412412, 0.211, '^'), 7.315379e-11, TOL);
+ck_assert_float_eq_tol(calculate_nums(2, -100, '^'), 10000, TOL);
+
 #test calculate_nums_mod
+ck_assert_float_nan(calculate_nums(0, 512, 'm'));
+ck_assert_float_eq_tol(calculate_nums(512, 0, 'm'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(24, 95214.11, 'm'), 95190.11, TOL);
+ck_assert_float_eq_tol(calculate_nums(2192940.211, 2291292.2141951, 'm'), 98352.0031951, TOL);
+ck_assert_float_eq_tol(calculate_nums(51212412, 51212412, 'm'), 0, TOL);
+ck_assert_float_eq_tol(calculate_nums(2412412, 0.211, 'm'), -2412411.789, TOL);
 

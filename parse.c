@@ -1,6 +1,6 @@
 #include "parse.h"
 
-bool isBasedDigit(char c, int b) {
+bool is_based_digit(char c, int b) {
     bool res = false;
     if (b > 10) {
         res = (c >= '0' && c <= '9') || (c >= 'a' && c < 'a' + b - 10) ||
@@ -11,7 +11,7 @@ bool isBasedDigit(char c, int b) {
     return res;
 }
 
-bool isExp(char **sptr, int *e) {
+bool is_exp(char **sptr, int *e) {
     int result = FAIL;
     if (**sptr == 'e' || **sptr == 'E') {
         bool isNegative = 0;
@@ -22,7 +22,7 @@ bool isExp(char **sptr, int *e) {
             isNegative = true;
             (*sptr)++;
         }
-        while (**sptr && isBasedDigit(**sptr, 10)) {
+        while (**sptr && is_based_digit(**sptr, 10)) {
             *e = *e * 10 + (**sptr - '0');
             (*sptr)++;
         }
@@ -34,15 +34,15 @@ bool isExp(char **sptr, int *e) {
     return result;
 }
 
-double s21_atof(char **sptr, size_t *numsCount) {
+double parse_to_float(char **sptr, size_t *numsCount) {
     long double res = 0.0;
     bool dot = false;
-    if (**sptr != '.' && isBasedDigit(**sptr, 10)) {
+    if (**sptr != '.' && is_based_digit(**sptr, 10)) {
         res += **sptr - '0';
         (*sptr)++;
         *numsCount = *numsCount + 1;
     }
-    for (; **sptr && (isBasedDigit(**sptr, 10) || **sptr == '.');
+    for (; **sptr && (is_based_digit(**sptr, 10) || **sptr == '.');
            (*sptr)++) {
         if (**sptr == '.') {
             dot = true;
@@ -55,14 +55,14 @@ double s21_atof(char **sptr, size_t *numsCount) {
     int e = 0, eDot = 0;
     if (dot) {
         (*sptr)++;
-        while (**sptr && isBasedDigit(**sptr, 10)) {
+        while (**sptr && is_based_digit(**sptr, 10)) {
             *numsCount = *numsCount + 1;
             res = res * 10 + (**sptr - '0');
             eDot--;
             (*sptr)++;
         }
     }
-    isExp(sptr, &e);
+    is_exp(sptr, &e);
     e = e + eDot;
     if (e > 0) {
         while (e != 0) {
@@ -80,9 +80,9 @@ double s21_atof(char **sptr, size_t *numsCount) {
 
 int parse_num(char **str, double *result) {
     int Status = FAIL;
-    if (isBasedDigit(**str, 10) == true) {
+    if (is_based_digit(**str, 10) == true) {
         size_t nums_count = 0;
-        *result = s21_atof(str, &nums_count);
+        *result = parse_to_float(str, &nums_count);
         if (nums_count != 0) {
             Status = SUCCESS;
         }
@@ -169,7 +169,7 @@ int get_priority(char operator) {
     } else if (operator == ')') {
         result = 4;
     } else if (operator == '(') {
-        result = 5;
+        result = 0;
     }
     return result;
 }
@@ -195,49 +195,39 @@ int str_to_polish(char *str, Queue **res) {
         Lexeme *lex = (Lexeme *) calloc (1, sizeof(Lexeme));
         lex->type = UNDEFINED;
         if (parse_num(&str, &result) == SUCCESS) {
-            lex->type = NUMBER;
-            lex->num = result;
+            lex->type = NUMBER, lex->num = result;
             queue_push(*res, lex);
-        } else if (parse_operator(&str, &lex->chr) == SUCCESS) {
-          lex->num = 0;
-          lex->type = OPERATOR;
-          Lexeme *seeked = stack_seek(stack);
-          while (stack->size > 0 && (seeked->type == OPERATOR || seeked->type == FUNCTION)) {
-              if (check_priority(seeked->chr, lex->chr) == SUCCESS) {
-                      queue_push(*res, stack_pop(stack));
-              } else { 
-                break;
-              }
-            }
-            stack_push(stack, lex);
-        } else if (Status == parse_bracket(&str, &lex->chr) == SUCCESS) {
-            lex->type = BRACKET;
-            if (lex->chr == '(') {
-                stack_push(stack, lex);
-            } else if (lex->chr == ')') {
-                if (stack->size <= 0) {
-                    Status = FAIL;
-                    break;
-                } else {
-                    Lexeme *seeked = stack_seek(stack);
-                    while (stack->size > 0 && seeked->chr != '(') {
-                        seeked = stack_seek(stack);
-                        // printf("stack char now: %c\n", stack->tail->lex->chr);
-                        queue_push(*res, stack_pop(stack));
-                    }
-                }
-            }
         } else if (parse_func(&str, &lex->chr) == SUCCESS) {
             lex->type = FUNCTION;
             stack_push(stack, lex);
-        }
-        // printf("stack char now: %c\n", stack->tail->lex->chr);
+        } else {
+            if (parse_operator(&str, &lex->chr) == SUCCESS) lex->type = OPERATOR;
+            else if (parse_bracket(&str, &lex->chr) == SUCCESS) lex->type = BRACKET;
+            if (lex->chr == ')' && stack->size <= 0) {
+                Status = FAIL;
+                break;
+            }
+            Lexeme *seeked = stack_seek(stack);
+            while (stack->size > 0 && seeked->type != NUMBER && lex->type != UNDEFINED) {
+                seeked = stack_seek(stack);
+                if (check_priority(seeked->chr, lex->chr) == SUCCESS || lex->chr == ')') {
+                    if (seeked->chr == '(' && lex->chr == ')') {    
+                        stack_pop(stack);
+                        break;
+                    } else {
+                        queue_push(*res, stack_pop(stack));
+                    }
+                } else {
+                    break;
+                }
+            }
+            lex->type == UNDEFINED ? Status = FAIL : lex->chr != ')' ? stack_push(stack, lex) : 0;
+        } 
         if (lex->type == UNDEFINED || Status == FAIL) free(lex);
     }
     while (stack->size > 0) {
         queue_push(*res, stack_pop(stack));
     }
-    // print_stack(stack);
-    free(stack);
+    stack_free(stack);
     return Status;
 }

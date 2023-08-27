@@ -49,6 +49,7 @@ void stack_free(Stack *stack) {
     } else {
         printf(STACK_IS_NULL_ERROR);
     }
+    free(stack);
 }
 void stack_push(Stack *stack, Lexeme *new_lexeme) {
     if (stack != NULL) {

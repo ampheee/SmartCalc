@@ -1,52 +1,56 @@
 #include "arithmetics.h"
 
-double calculate(Queue* que, double x) {
+double calculate(Queue* que, double x, int *Status) {
     double result = 0.0;
     QueNode* popped = que->head;
     Stack* stack = stack_init();
-    while (popped != NULL) {
+    while (popped != NULL && *Status == SUCCESS) {
         Lexeme* lex = popped->lex;
         popped = popped->next;
-        // if current lexeme is number
         if (lex->type == NUMBER) {
-            Lexeme* lexnum = (Lexeme*)calloc(1, sizeof(lex));
-            lexnum->type = NUMBER;
+            Lexeme* new_lex = (Lexeme*)calloc(1, sizeof(Lexeme));
+            new_lex->type = NUMBER;
             if (lex->chr != 'x') {
-                lexnum->num = lex->num;
+                new_lex->num = lex->num;
             } else {
-                lexnum->num = x;
-                if (lex->num < 0) lexnum->num *= -1;
+                new_lex->num = x;
+                if (lex->num < 0) new_lex->num *= -1;
             }
-            stack_push(stack, lexnum);
+            stack_push(stack, new_lex);
         }
-        // if is function
         if (lex->type == FUNCTION) {
-            Lexeme* lexnum = stack_pop(stack);
-            if (lexnum->type != NUMBER)
-                printf("\n!ERR:stack->num is NOT a num\n");
-            double res_value = calculate_func(to_radians(lexnum->num), lex->chr);
-            lexnum->num = res_value;
-            stack_push(stack, lexnum);
+            Lexeme* popped_lex = stack_pop(stack);
+            if (is_invalid_num(popped_lex, Status) == false) {
+                double res_value = calculate_func(popped_lex->num, lex->chr);
+                popped_lex->num = res_value;
+                stack_push(stack, popped_lex);
+            }
         }
-        // if is operator
         if (lex->type == OPERATOR) {
-            Lexeme* num1 = stack_pop(stack);
-            Lexeme* num2 = stack_pop(stack);
-            if (num1->type != NUMBER) printf("\n!ERR:num1 is NOT a num");
-            if (num2->type != NUMBER) printf("\n!ERR:num2 is NOT a num");
-            double res_value = calculate_nums(num1->num, num2->num, lex->chr);
-            free(num1);
-            free(num2);
-            Lexeme* lexnum = (Lexeme*)calloc(1, sizeof(lex));
-            lexnum->num = res_value;
-            lexnum->type = NUMBER;
-            stack_push(stack, lexnum);
+            Lexeme* popped_lex1 = stack_pop(stack);
+            Lexeme* popped_lex2 = stack_pop(stack);
+            if (is_invalid_lexemes(popped_lex1, popped_lex2, Status) == false) {
+                double res_value = calculate_nums(popped_lex1->num, popped_lex2->num, lex->chr);
+                free(popped_lex1);
+                free(popped_lex2);
+                Lexeme* new_lex = (Lexeme*)calloc(1, sizeof(Lexeme));
+                new_lex->num = res_value;
+                new_lex->type = NUMBER;
+                stack_push(stack, new_lex);
+            }
         }
     }
-    Lexeme* stackResult = stack_pop(stack);
-    if (stackResult->type != NUMBER) printf("\n!ERR:result is NOT a num\n");
-    result = stackResult->num;
-    free(stackResult);
+    Lexeme* result_lex = stack_pop(stack);
+    if (is_invalid_num(result_lex, Status) == false) {
+        result = result_lex->num;
+        free(result_lex);
+    } else {
+        printf("\n!ERR:result is NOT a num\n");
+    }
+    if (stack->size > 0) {
+        printf(WRONG_EXP);
+        *Status = FAIL;
+    }
     stack_free(stack);
     return result;
 }
@@ -84,7 +88,10 @@ double calculate_nums(double num1, double num2, char op) {
 }
 
 double calculate_func(double value, char op) {
-    double retval;
+    double retval = 0;
+    if (is_trigonometric(op)) {
+        value = to_radians(value);
+    }
     switch (op) {
         case COS:
             retval = cos(value);
@@ -96,13 +103,13 @@ double calculate_func(double value, char op) {
             retval = tan(value);
             break;
         case ACOS:
-            retval = acos(value);
+            retval = to_degrees(acos(value));
             break;
         case ASIN:
-            retval = asin(value);
+            retval = to_degrees(asin(value));
             break;
         case ATAN:
-            retval = atan(value);
+            retval = to_degrees(atan(value));
             break;
         case SQRT:
             retval = sqrt(value);
@@ -123,4 +130,37 @@ double calculate_func(double value, char op) {
 double to_radians(double x) {
     double radians = x * ( M_PI / 180);
     return radians;
+}
+
+double to_degrees(double x) {
+    double degrees = x * (180 / M_PI);
+    return degrees;
+}
+
+bool is_invalid_num(Lexeme *num, int *Status) {
+    bool is_invalid = false;
+    if (num == NULL) {
+        is_invalid = true;
+    } else if (num->type != NUMBER) {
+        is_invalid = true;
+    }
+    *Status = is_invalid ? FAIL : SUCCESS;
+    return is_invalid;
+}
+
+bool is_invalid_lexemes(Lexeme *num1, Lexeme *num2, int *Status) {
+    bool is_invalid = false;
+    if (is_invalid_num(num1, Status) || is_invalid_num(num2, Status)) {
+        is_invalid = true;
+    }
+    is_invalid ? printf(WRONG_EXP) : 0;
+    return is_invalid;
+}
+
+bool is_trigonometric(char op) {
+    bool is_trig = false;
+    if (op == COS || op == SIN || op == TAN) {
+            is_trig = true;
+    }
+    return is_trig;
 }

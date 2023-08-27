@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "stack.h"
-#include "queue.h"
 #include "parse.h"
 #include "arithmetics.h"
 
@@ -28,21 +26,16 @@ int str_to_polish_debug(char *str, Queue **res) {
                 Status = FAIL;
                 break;
             }
-            // ok 
             Lexeme *seeked = stack_seek(stack);
             while (stack->size > 0 && seeked->type != NUMBER && lex->type != UNDEFINED) {
-                //ok
-                //if close bracket - queue_push while open bracket.
-                //else if non bracket - check_priority.
                 seeked = stack_seek(stack);
-                if (check_priority(seeked->chr, lex->chr) != FAIL) {
-                    if (seeked->chr == '(') {
+                if (check_priority(seeked->chr, lex->chr) == SUCCESS || lex->chr == ')') {
+                    if (seeked->chr == '(' && lex->chr == ')') {    
                         stack_pop(stack);
                         break;
                     } else {
                         queue_push(*res, stack_pop(stack));
                     }
-                    // lex->type == BRACKET ? (lex->chr = seeked->chr) : 0;
                 } else {
                     break;
                 }
@@ -54,21 +47,31 @@ int str_to_polish_debug(char *str, Queue **res) {
     while (stack->size > 0) {
         queue_push(*res, stack_pop(stack));
     }
-    free(stack);
+    stack_free(stack);
     return Status;
 }
 
 
 int main() {
-//   char *str = "(sin(30) * cos(sin(30)))*200 + (10 * 50) ^ 2";
-char  *str = "(sin(30) - cos(sin(60))) * 200";
+  char *str0 = "((sin(30) * cos(sin(30))) * 200 + (10 * 50) ^ 2 - ((55 ^ 2) - cos(40) * 15) * log(50))";
+//   char *str0 = "sn(100)";
+//   char *str1 = "124/12";
   Queue *res_que = queue_init();
-  if (str_to_polish_debug(str, &res_que)) {
+  if (str_to_polish_debug(str0, &res_que) == SUCCESS) {
+    int Status = SUCCESS;
     print_queue(res_que);
+    double res = calculate(res_que, 0, &Status);
+    Status == SUCCESS ?  printf("res: %lf\n", res) : printf("error!\n");;
   } else {
     printf("error!\n");
   }
-  double res = calculate(res_que, 0);
-  printf("res: %lf\n", res);
-  
+  queue_free(res_que);
+//   if (str_to_polish_debug(str1, &res_que)) {
+//     print_queue(res_que);
+//   } else {
+//     printf("error!\n");
+//   }
+//   res = calculate(res_que, 0);
+//   printf("res: %lf\n", res);
+  free(res_que);
 }

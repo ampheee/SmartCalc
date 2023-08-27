@@ -20,6 +20,7 @@ typedef struct Lexeme {
     double num;
 } Lexeme;
 
+
 typedef struct StackNode {
     Lexeme *lex;
     struct StackNode *next;
