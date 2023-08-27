@@ -36,7 +36,7 @@ Lexeme *stack_seek(Stack *stack) {
     } else if (stack == NULL){
         printf(STACK_IS_NULL_ERROR);
     } else if (stack->size <= 0) {
-        printf(STACK_IS_EMPTY_ERROR);
+        // printf(STACK_IS_EMPTY_ERROR);
     }
     return result;
 }

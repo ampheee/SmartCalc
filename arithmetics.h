@@ -6,7 +6,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#define MODE 'm'
+#define MOD 'm'
 
 #define COS 'c'
 #define SIN 's'

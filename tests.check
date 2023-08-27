@@ -1,4 +1,16 @@
 #include "parse.h"
+#include "arithmetics.h"
+
+#define TOL 1e-5
+#define CASE_0    0 
+#define CASE_30   30
+#define CASE_60   60
+#define CASE_90   90
+#define CASE_120  120
+#define CASE_150  150
+#define CASE_180  180
+#define CASE_360  360
+
 
 #test str_to_polish_test0
 Queue *res_que = queue_init();
@@ -54,4 +66,107 @@ queue_free(res_que);
 #test parse_operator_test3
 #test parse_operator_test4
 #test parse_operator_test5
+
+#test to_radians_test
+for (int i = 0; i < 100; i++) {
+  ck_assert_float_eq_tol(to_radians(i), 0.0174533 * i, TOL);
+}
+ck_assert_float_eq_tol(to_radians(CASE_30), 0.523599, TOL);
+ck_assert_float_eq_tol(to_radians(CASE_60), 1.0472, TOL);
+ck_assert_float_eq_tol(to_radians(CASE_90), 1.5708, TOL);
+ck_assert_float_eq_tol(to_radians(CASE_180), 3.14159, TOL);
+ck_assert_float_eq_tol(to_radians(CASE_360), 6.28319, TOL);
+
+#test calculate_func_cos
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'c'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 'c'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 'c'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 'c'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'c'), -0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 'c'), -0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 'c'), -1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 'c'), 0.8571673007, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 'c'), -0.88294759289, TOL);
+
+#test calculate_func_sin
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0.51503807491, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+
+#test calculate_func_tan
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 't'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 't'), 0.57735026919, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 't'), 1.73205080757, TOL);
+// ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 't'), 1, TOL); //catch error
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'t'), -1.73205080757, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 't'), -0.57735026919, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 't'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 't'), 0.60086061902, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 't'), 0.53170943156, TOL);
+
+#test calculate_func_acos
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'C'), 90, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(0.5), 'C'), 60, TOL);
+
+#test calculate_func_asin
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'S'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 'S'), 0.5, TOL);
+
+#test calculate_func_atan
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 'T'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 'T'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 'T'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 'T'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'T'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 'T'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 'T'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 'T'), 0.51503807491, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 'T'), -0.46947156272, TOL);
+
+#test calculate_func_sqrt
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0.51503807491, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+
+#test calculate_func_log
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0 , TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+
+#test calculate_func_log10
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_0), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_30), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_60), 's'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_90), 's'), 1, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_120),'s'), 0.86602540378, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_150), 's'), 0.5, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(CASE_180), 's'), 0, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(1111), 's'), 0.51503807491, TOL);
+ck_assert_float_eq_tol(calculate_func(to_radians(88888888), 's'), -0.46947156272, TOL);
+
+
+#test calculate_nums_plus
+#test calculate_nums_minus
+#test calculate_nums_multiply
+#test calculate_nums_div
+#test calculate_nums_pow
+#test calculate_nums_mod
 

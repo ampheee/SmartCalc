@@ -16,3 +16,5 @@ test:
 	checkmk clean_mode=1 $(TESTCHKSRC) > $(TESTSRC)
 	$(CC)	$(TESTSRC)	$(OBJECTS)	$(PKGFLAGS)	-o	TestsSmartCalc $(CHECKFLAGS)	--coverage $(FLAGS)	$(INCLUDES)
 
+clear:
+	rm -rf TestsSmartCalc*

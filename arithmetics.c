@@ -73,7 +73,7 @@ double calculate_nums(double num1, double num2, char op) {
         case '^':
             res = pow(num2, num1);
             break;
-        case MODE:
+        case MOD:
             res = fmod(num2, num1);
             break;
         default:

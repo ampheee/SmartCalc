@@ -166,6 +166,10 @@ int get_priority(char operator) {
         result = 2;
     } else if (operator == '^') {
         result = 3;
+    } else if (operator == ')') {
+        result = 4;
+    } else if (operator == '(') {
+        result = 5;
     }
     return result;
 }
