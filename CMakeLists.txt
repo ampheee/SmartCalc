@@ -13,5 +13,5 @@ add_definitions(${GTK3_CFLAGS_OTHER})
 
 add_executable(SmartCalc stack.c queue.c
         parse.c arithmetics.c debug.c
-        interface.c calculator.c)
+        interface.c calculator.c callbacks.c)
 target_link_libraries(SmartCalc ${GTK3_LIBRARIES} m)

@@ -5,8 +5,6 @@
 default_target: all
 .PHONY : default_target
 
-include my.mk
-
 # Allow only one "make -f Makefile2" at a time, but pass parallelism.
 .NOTPARALLEL:
 
@@ -59,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ampheee/github/SmartCalc
+CMAKE_SOURCE_DIR = /home/rustam/SmartCalc
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ampheee/github/SmartCalc
+CMAKE_BINARY_DIR = /home/rustam/SmartCalc
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -89,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ampheee/github/SmartCalc/CMakeFiles /home/ampheee/github/SmartCalc//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rustam/SmartCalc/CMakeFiles /home/rustam/SmartCalc//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ampheee/github/SmartCalc/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rustam/SmartCalc/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -178,6 +176,30 @@ calculator.s: calculator.c.s
 calculator.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/calculator.c.s
 .PHONY : calculator.c.s
+
+callbacks.o: callbacks.c.o
+.PHONY : callbacks.o
+
+# target to build an object file
+callbacks.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/callbacks.c.o
+.PHONY : callbacks.c.o
+
+callbacks.i: callbacks.c.i
+.PHONY : callbacks.i
+
+# target to preprocess a source file
+callbacks.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/callbacks.c.i
+.PHONY : callbacks.c.i
+
+callbacks.s: callbacks.c.s
+.PHONY : callbacks.s
+
+# target to generate assembly for a file
+callbacks.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/callbacks.c.s
+.PHONY : callbacks.c.s
 
 debug.o: debug.c.o
 .PHONY : debug.o
@@ -314,6 +336,9 @@ help:
 	@echo "... calculator.o"
 	@echo "... calculator.i"
 	@echo "... calculator.s"
+	@echo "... callbacks.o"
+	@echo "... callbacks.i"
+	@echo "... callbacks.s"
 	@echo "... debug.o"
 	@echo "... debug.i"
 	@echo "... debug.s"

@@ -16,5 +16,4 @@
 #include "arithmetics.h"
 #include "stack.h"
 
-
 #endif  // SMARTCALC_CALCULATOR_H_
