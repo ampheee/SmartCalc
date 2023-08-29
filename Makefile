@@ -153,6 +153,30 @@ arithmetics.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/arithmetics.c.s
 .PHONY : arithmetics.c.s
 
+bonus/credit/credit.o: bonus/credit/credit.c.o
+.PHONY : bonus/credit/credit.o
+
+# target to build an object file
+bonus/credit/credit.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/bonus/credit/credit.c.o
+.PHONY : bonus/credit/credit.c.o
+
+bonus/credit/credit.i: bonus/credit/credit.c.i
+.PHONY : bonus/credit/credit.i
+
+# target to preprocess a source file
+bonus/credit/credit.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/bonus/credit/credit.c.i
+.PHONY : bonus/credit/credit.c.i
+
+bonus/credit/credit.s: bonus/credit/credit.c.s
+.PHONY : bonus/credit/credit.s
+
+# target to generate assembly for a file
+bonus/credit/credit.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SmartCalc.dir/build.make CMakeFiles/SmartCalc.dir/bonus/credit/credit.c.s
+.PHONY : bonus/credit/credit.c.s
+
 calculator.o: calculator.c.o
 .PHONY : calculator.o
 
@@ -333,6 +357,9 @@ help:
 	@echo "... arithmetics.o"
 	@echo "... arithmetics.i"
 	@echo "... arithmetics.s"
+	@echo "... bonus/credit/credit.o"
+	@echo "... bonus/credit/credit.i"
+	@echo "... bonus/credit/credit.s"
 	@echo "... calculator.o"
 	@echo "... calculator.i"
 	@echo "... calculator.s"

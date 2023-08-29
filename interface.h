@@ -30,6 +30,8 @@ typedef struct {
 #define DONT_ROTATE 0
 
 void InitUserGui(GtkWidget *window);
+void InitCreditCalc(GtkWidget *grid, GtkWidget *Entry);
+void InitDepositCalc(GtkWidget *grid, GtkWidget *Entry);
 
 void draw_graph_line(s_graph_properties *gp);
 void draw_axis_text(s_graph_properties *gp, gdouble value, int rotate);

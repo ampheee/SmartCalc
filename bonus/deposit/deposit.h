@@ -2,6 +2,7 @@
 #define _DEPOSIT_ 
 
 #include "../parse.h"
+#include "deposit.h"
 
 typedef struct {
   long double amount;

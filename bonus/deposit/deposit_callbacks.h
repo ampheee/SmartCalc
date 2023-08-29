@@ -1,0 +1,4 @@
+#infdef _DEPOSIT_CALLBACKS_
+#define _DEPOSIT_CALLBACKS_
+
+#endif //_DEPOSIT_CALLBACKS_

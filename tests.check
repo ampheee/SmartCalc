@@ -36,15 +36,28 @@ print_queue(res_que);
 Queue *res_que = queue_init();
 ck_assert_ptr_nonnull(res_que);
 char *str0 = "+143*32";
+char *str1 = "i`m write it on work";
+char *str2 = "t13e+2";
+char *str3 = "121212.21w";
+char *str4 = "-13.2+cos(()"
 ck_assert_int_eq(str_to_polish(str0, &res_que), FAIL);
-
-
-#test str_to_polish_test2
-#test str_to_polish_test3
-#test str_to_polish_test4
-#test str_to_polish_test5
+ck_assert_int_eq(str_to_polish(str1, &res_que), FAIL);
+ck_assert_int_eq(str_to_polish(str2, &res_que), FAIL);
+ck_assert_int_eq(str_to_polish(str3, &res_que), FAIL);
+ck_assert_int_eq(str_to_polish(str4, &res_que), FAIL);
 
 #test parse_num_test0
+char *str0 = "141"
+char *str1 = "21414141123112512"
+char *str2 = "12e+3"
+char *str3 = "12e-3"
+char *str4 = "12e-10"
+ck_assert_float_eq_tol();
+ck_assert_float_eq_tol();
+ck_assert_float_eq_tol();
+ck_assert_float_eq_tol();
+ck_assert_float_eq_tol
+
 #test parse_num_test1
 #test parse_num_test2
 #test parse_num_test3

@@ -1,37 +1,30 @@
 #include "credit.h"
 
-long double total_payment(long double loan, long double interestRate, int term,
-                          int type, long double *firstPayment,
-                          long double *lastPayment) {
-  long double totalPayment = 0;
-  if (loan < 0.01 || interestRate < 0.01 || term < 1 || !firstPayment ||
-      !lastPayment) {
-    totalPayment = FAIL;
-  } else {
-    long double payment = 0;
-    long double monthlyInterest = (interestRate / 100.00) / 12.00;
-    if (type == ANNUITY) {
-      payment = loan *
-                (monthlyInterest +
-                 (monthlyInterest /
-                  ((pow((1.00 + monthlyInterest), (long double)term) - 1.00))));
-      *firstPayment = *lastPayment = payment;
-      totalPayment = payment * term;
-    } else if (type == DIFFERENTIATED) {
-      long double mainPayment = loan / term;
-      long double alreadyRepaid = 0;
-      long double restOfLoan = loan;
-      for (int i = 0; i < term; i++) {
-        alreadyRepaid = mainPayment * i;
-        restOfLoan = loan - alreadyRepaid;
-        payment = mainPayment + restOfLoan * monthlyInterest;
-        totalPayment += payment;
-        if (i == 0) *firstPayment = payment;
-        if (i == term - 1) *lastPayment = payment;
-      }
-    } else {
-      totalPayment = FAIL;
+long double calculate_credit(long double credit, long double percent, int period,
+                             int type, long double *firstPayment,
+                             long double *lastPayment) {
+    if (credit <= 0.1 || percent <= 0.1 || period <= 0 || type < 0 || type > 2 ||
+        firstPayment == NULL || lastPayment == NULL) {
+        fprintf(stderr, "Invalid input parameters\n");
+        return FAIL;
     }
-  }
-  return totalPayment;
+    long double monthlyPercent = percent / 100 / 12;
+    long double annuityPayment = credit * monthlyPercent *
+                                 powl(1 + monthlyPercent, period) /
+                                 (powl(1 + monthlyPercent, period) - 1);
+    long double totalAmount = annuityPayment * period;
+    long double differentialPayment = credit / period + credit * monthlyPercent;
+
+    if (type == ANNUITY) {
+        *firstPayment = annuityPayment;
+        *lastPayment = annuityPayment;
+        return totalAmount;
+    } else if (type == DIFFERENTIATED) {
+        *firstPayment = differentialPayment;
+        *lastPayment = differentialPayment + credit * monthlyPercent;
+        return totalAmount;
+    }
+
+    fprintf(stderr, "Invalid payment type\n");
+    return 0;
 }

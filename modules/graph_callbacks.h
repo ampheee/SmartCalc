@@ -1,0 +1,5 @@
+#ifndef _GRAPH_CALLBACKS_
+#define _GRAPH_CALLBACKS_
+
+
+#endif //_GRAPH_CALLBACKS
