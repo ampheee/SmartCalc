@@ -1,5 +1,5 @@
-#include "parse.h"
-#include "arithmetics.h"
+#include "modules/parse.h"
+#include "modules/arithmetics.h"
 
 #define TOL 1e-5
 #define CASE_0    0 
@@ -47,16 +47,22 @@ ck_assert_int_eq(str_to_polish(str3, &res_que), FAIL);
 ck_assert_int_eq(str_to_polish(str4, &res_que), FAIL);
 
 #test parse_num_test0
+double result = 0;
 char *str0 = "141"
 char *str1 = "21414141123112512"
 char *str2 = "12e+3"
 char *str3 = "12e-3"
 char *str4 = "12e-10"
-ck_assert_float_eq_tol();
-ck_assert_float_eq_tol();
-ck_assert_float_eq_tol();
-ck_assert_float_eq_tol();
-ck_assert_float_eq_tol
+ck_assert_int_eq(parse_num(&str0, &result), SUCCESS);
+ck_assert_float_eq_tol(result, 141, TOL);
+ck_assert_int_eq(parse_num(&str1, &result), SUCCESS);
+ck_assert_float_eq_tol(result, 21414141123112512, TOL);
+ck_assert_int_eq(parse_num(&str2, &result), SUCCESS);
+ck_assert_float_eq_tol(result, 12e+3, TOL);
+ck_assert_int_eq(parse_num(&str3, &result), SUCCESS);
+ck_assert_float_eq_tol(result, 12e-3, TOL);
+ck_assert_int_eq(parse_num(&str4, &result), SUCCESS);
+ck_assert_float_eq_tol(result, 12e-10, TOL);
 
 #test parse_num_test1
 #test parse_num_test2
@@ -120,13 +126,7 @@ queue_free(res_que);
 
 #test calculate_func_test1
 Queue *res_que = queue_init();
-ck_assert_ptr_nonnull(res_que);   
-char *str0 = "";
-char *str1 = "";
-char *str2 = "";
-char *str3 = "";
-char *str4 = "";
-char *str5 = "";
+ck_assert_ptr_nonnull(res_que);
 
 #test calculate_func_cos
 ck_assert_float_eq_tol(calculate_func(CASE_0, 'c'), 1, TOL);
@@ -264,4 +264,3 @@ ck_assert_float_eq_tol(calculate_nums(24, 95214.11, 'm'), 95190.11, TOL);
 ck_assert_float_eq_tol(calculate_nums(2192940.211, 2291292.2141951, 'm'), 98352.0031951, TOL);
 ck_assert_float_eq_tol(calculate_nums(51212412, 51212412, 'm'), 0, TOL);
 ck_assert_float_eq_tol(calculate_nums(2412412, 0.211, 'm'), -2412411.789, TOL);
-

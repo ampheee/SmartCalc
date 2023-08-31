@@ -36,7 +36,7 @@ void InitDepositCalc(GtkWidget *grid, GtkWidget *Entry);
 void draw_graph_line(s_graph_properties *gp);
 void draw_axis_text(s_graph_properties *gp, gdouble value, int rotate);
 void draw_axis(s_graph_properties *gp);
-static gboolean on_draw(GtkWidget *widget, cairo_t *cairo);
+gboolean on_draw(GtkWidget *widget, cairo_t *cairo);
 void button_draw_clicked(GtkWidget *button, gpointer entry);
 void close_window(GtkWidget *widget, gpointer window);
 void check_same_dom_codom_toggled_cb(GtkCheckButton *button);

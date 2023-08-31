@@ -11,7 +11,10 @@ link_directories(${GTK3_LIBRARY_DIRS})
 
 add_definitions(${GTK3_CFLAGS_OTHER})
 
-add_executable(SmartCalc stack.c queue.c
-        parse.c arithmetics.c debug.c
-        interface.c calculator.c callbacks.c bonus/credit/credit.c)
+add_executable(SmartCalc modules/stack.c modules/queue.c
+        modules/parse.c modules/arithmetics.c modules/debug.c
+        modules/interface.c modules/calculator.c
+        modules/callbacks.c bonus/credit/credit.c
+        bonus/credit/credit_callbacks.c bonus/deposit/deposit.c
+        bonus/deposit/deposit_callbacks.c)
 target_link_libraries(SmartCalc ${GTK3_LIBRARIES} m)

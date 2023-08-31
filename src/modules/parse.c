@@ -188,7 +188,6 @@ int check_priority(char op1, char op2) {
 int str_to_polish(char *str, Queue **res) {
     Stack *stack = stack_init();
     int Status = SUCCESS;
-    size_t len = strlen(str);
     double result = 1;
     while (*str && Status == SUCCESS) {
         remove_spaces(&str);
