@@ -6,6 +6,9 @@
 
 #define ANNUITY 1
 #define DIFFERENTIATED 2
+void init_entries_credit(GtkWidget *grid);
+void init_buttons_credit(GtkWidget *grid);
+
 void on_calculate_credit_button_clicked();
 
 void on_differentiated_radio_clicked();

@@ -211,7 +211,8 @@ int str_to_polish(char *str, Queue **res) {
                 seeked = stack_seek(stack);
                 if (check_priority(seeked->chr, lex->chr) == SUCCESS || lex->chr == ')') {
                     if (seeked->chr == '(' && lex->chr == ')') {    
-                        stack_pop(stack);
+                        Lexeme *popped = stack_pop(stack);
+                        free(popped);
                         break;
                     } else {
                         queue_push(*res, stack_pop(stack));
@@ -222,11 +223,45 @@ int str_to_polish(char *str, Queue **res) {
             }
             lex->type == UNDEFINED ? Status = FAIL : lex->chr != ')' ? stack_push(stack, lex) : 0;
         } 
-        if (lex->type == UNDEFINED || Status == FAIL) free(lex);
+        if (lex->type == UNDEFINED || Status == FAIL || lex->chr == ')') free(lex);
     }
     while (stack->size > 0) {
         queue_push(*res, stack_pop(stack));
     }
     stack_free(stack);
     return Status;
+}
+
+char* replace_word(char* s, const char* oldW,
+                const char* newW) {
+    char* result = NULL;
+    int i, cnt = 0;
+    int newWlen = strlen(newW);
+    int oldWlen = strlen(oldW);
+    for (i = 0; s[i] != '\0'; i++) {
+        if (s[i] == 'X') {
+            s[i] += 32;
+        }
+    }
+    for (i = 0; s[i] != '\0'; i++) {
+        if (strstr(&s[i], oldW) == &s[i]) {
+            cnt++;
+            i += oldWlen - 1;
+        }
+    }
+    result = (char*)malloc(i + cnt * (newWlen - oldWlen) + 1);
+    if (result != NULL) {
+         i = 0;
+        while (*s) {
+            if (strstr(s, oldW) == s) {
+                strcpy(&result[i], newW);
+                i += newWlen;
+                s += oldWlen;
+            } else {
+                result[i++] = *s++;
+            }
+        }
+        result[i] = '\0';   
+    }
+    return result;
 }

@@ -23,12 +23,12 @@
 #define LN 'l'
 #define LOG 'L'
 
-double calculate(Queue* exp, double x, int *Status);
+double calculate(Queue* exp, int *Status);
 double calculate_nums(double num1, double num2, char op);
 double calculate_func(double value, char op);
 double to_radians(double x);
 double to_degrees(double x);
-bool is_invalid_num(Lexeme *num, int *Status);
+bool is_invalid_num(Lexeme *num);
 bool is_invalid_lexemes(Lexeme *num1, Lexeme *num2, int *Status);
 bool is_trigonometric(char op);
 

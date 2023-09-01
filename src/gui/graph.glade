@@ -35,7 +35,7 @@
     <property name="resizable">False</property>
     <property name="destroy-with-parent">True</property>
     <child>
-      <!-- n-columns=6 n-rows=12 -->
+      <!-- n-columns=8 n-rows=12 -->
       <object class="GtkGrid" id="fraph_grid">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -63,7 +63,7 @@
           <packing>
             <property name="left-attach">3</property>
             <property name="top-attach">7</property>
-            <property name="width">5</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -74,9 +74,8 @@
             <property name="xalign">1</property>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">2</property>
             <property name="top-attach">7</property>
-            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -117,6 +116,7 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">7</property>
+            <property name="width">2</property>
           </packing>
         </child>
         <child>
@@ -134,19 +134,20 @@
         <child>
           <object class="GtkButton" id="graph_close">
             <property name="label">close</property>
+            <property name="width-request">200</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
+            <property name="margin-right">88</property>
             <property name="margin-start">3</property>
             <property name="margin-end">3</property>
             <property name="margin-top">3</property>
             <property name="margin-bottom">3</property>
-            <property name="relief">half</property>
-            <property name="width-request">200</property>
           </object>
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">11</property>
+            <property name="width">5</property>
           </packing>
         </child>
         <child>
@@ -162,7 +163,7 @@
           <packing>
             <property name="left-attach">0</property>
             <property name="top-attach">6</property>
-            <property name="width">2</property>
+            <property name="width">5</property>
           </packing>
         </child>
         <child>
@@ -236,7 +237,6 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="active">False</property>
             <property name="draw-indicator">True</property>
             <signal name="toggled" handler="check_same_max_min_toggled_cb" swapped="no"/>
           </object>
@@ -252,7 +252,6 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>
-            <property name="active">False</property>
             <property name="draw-indicator">True</property>
             <signal name="toggled" handler="check_same_dom_codom_toggled_cb" swapped="no"/>
           </object>
@@ -261,6 +260,66 @@
             <property name="top-attach">10</property>
             <property name="width">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>

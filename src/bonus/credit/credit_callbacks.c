@@ -11,13 +11,14 @@ GtkWidget *sum_credit;
 void init_buttons_credit(GtkWidget *grid) {
   const gchar *labels[] = {
       "Credit:", "Period term:", "Percent rate:", "Type:",
-      "Payment | Monthly:", "Overlay:", "Total:", "powered by babbling\n\tschool21 | 2023"
+      "Payment | Monthly:", "Overpay:", "Total:"
     };
-    for (int row = 0; row < 8; row++) {
+    for (int row = 0; row < 7; row++) {
       GtkWidget *label = gtk_button_new_with_label(labels[row]);
       gtk_grid_attach(GTK_GRID(grid), label, 0, row, 1, 1);
       gtk_widget_set_sensitive(label, FALSE);
     }
+    setup_credentials(grid, 0, 7, 1, 1);
     GtkWidget *annuity = gtk_radio_button_new_with_label(NULL, "ANNUITY");
     g_signal_connect(annuity, "toggled", G_CALLBACK(on_annuity_radio_clicked), "ANNUITY");
     gtk_grid_attach(GTK_GRID(grid), annuity, 1, 3, 1, 1);
@@ -44,22 +45,6 @@ void init_entries_credit(GtkWidget *grid) {
   connect_entry(grid, percent_credit, 1, 2, 2, 1, false);
 }
 
-void on_credit_button_clicked() {
-  GtkWidget *window_new = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title(GTK_WINDOW(window_new), "Credit calculator");
-  gtk_window_set_default_size(GTK_WINDOW(window_new), 400, 300);
-  gtk_window_set_resizable(GTK_WINDOW(window_new), FALSE);
-  GtkWidget *box_new = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add(GTK_CONTAINER(window_new), box_new);
-  GtkWidget *grid = gtk_grid_new();
-  gtk_grid_set_column_homogeneous(GTK_GRID(grid), TRUE);
-  gtk_grid_set_row_homogeneous(GTK_GRID(grid), TRUE);
-  gtk_box_pack_start(GTK_BOX(box_new), grid, TRUE, TRUE, 0);
-  init_entries_credit(grid);
-  init_buttons_credit(grid);
-  gtk_widget_show_all(window_new);
-}
-
 void on_calculate_credit_button_clicked() {
   long double total_payment_output = 0;
   long double first_payment = 0;
@@ -71,11 +56,11 @@ void on_calculate_credit_button_clicked() {
   total_payment_output = calculate_credit(double_credit, double_percent, int_period,
                                         type_credit, &first_payment, &last_payment);
   sprintf(string_buffer, "%.2Lf", total_payment_output);
-  gtk_label_set_text(GTK_LABEL(sum_credit), total_payment_output >= 0 ? string_buffer : "INCORRECT!");
+  gtk_label_set_text(GTK_LABEL(sum_credit), total_payment_output >= 0 ? string_buffer : "ERROR!");
   if (first_payment == last_payment) {
     memset(string_buffer, 0, sizeof(string_buffer));
     sprintf(string_buffer, "%.2Lf", first_payment);
-    gtk_label_set_text(GTK_LABEL(monthly_payment_credit), total_payment_output >= 0 ? string_buffer : "INCORRECT!");
+    gtk_label_set_text(GTK_LABEL(monthly_payment_credit), total_payment_output >= 0 ? string_buffer : "ERROR!");
   } else {
     char buffer_2[64];
     sprintf(string_buffer, "%.2Lf", first_payment);
@@ -86,7 +71,7 @@ void on_calculate_credit_button_clicked() {
   }
   memset(string_buffer, 0, sizeof(string_buffer));
   sprintf(string_buffer, "%.2Lf", total_payment_output - double_credit);
-  gtk_label_set_text(GTK_LABEL(overpay_credit), total_payment_output >= 0 ? string_buffer : "INCORRECT!");
+  gtk_label_set_text(GTK_LABEL(overpay_credit), total_payment_output >= 0 ? string_buffer : "ERROR!");
 }
 
 void on_differentiated_radio_clicked() {

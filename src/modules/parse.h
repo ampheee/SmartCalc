@@ -31,5 +31,7 @@ bool is_based_digit(char c, int b);
 bool is_exp(char **sptr, int *e);
 double parse_to_float(char **sptr, size_t *numsCount);
 int str_to_polish(char *str, Queue **res);
+char* replace_word(char* s, const char* oldW,
+                const char* newW);
 
 #endif //SMARTCALC_ARITHMETICS_H_

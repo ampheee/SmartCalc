@@ -14,28 +14,43 @@ int calculate_deposit(DEPOSIT_STRUCT *deposit) {
         printf("Error\n");
         return FAIL;
     }
-    double balance = deposit->deposit;
-    for(int i = 1; i <= deposit->term; i++) {
-      double interest = balance * (deposit->percent_rate / 100) / deposit->frequency_of_payment;
-    if(deposit->capitalization_of_interest > 0 && i % deposit->capitalization_of_interest == 0) {
-      balance += interest;
+  long double sum = deposit->deposit;
+  long double rate = (deposit->percent_rate / 12) / 100;
+  long double tax = deposit->tax_rate / 100;
+  long double cap = 0;
+
+  for (int i = 0; i < deposit->term; i++) {
+    long double accural = sum * rate;
+    long double tax_sum = accural * tax;
+    deposit->accrued_tax += tax_sum;
+    deposit->accrued_deposit += accural - tax_sum;
+    if (deposit->frequency_of_payment && deposit->capitalization_of_interest) {
+      cap += accural - tax_sum;
+      if (!((i + 1) % deposit->frequency_of_payment)) {
+        sum += cap;
+        cap = 0;
+      }
     }
-    if(deposit->frequency_of_replanishment > 0 && i % deposit->frequency_of_replanishment == 0) {
-      balance += deposit->replenishment;
+    if (deposit->replenishment && deposit->frequency_of_replanishment) {
+      if (!((i + 1) % deposit->frequency_of_replanishment)) {
+        sum += deposit->replenishment;
+      }
     }
-    if(deposit->frequency_of_withdrawal > 0 && i % deposit->frequency_of_withdrawal == 0) {
-      if(balance < deposit->withdrawal) {
-        return FAIL;
-      } 
-      balance -= deposit->withdrawal;
+    if (deposit->withdrawal && deposit->frequency_of_withdrawal) {
+      if (!((i + 1) % deposit->frequency_of_withdrawal)) {
+        sum -= deposit->withdrawal;
+      }
     }
-    balance += interest;
-    double tax = interest * (deposit->tax_rate / 100);
-    deposit->accrued_tax += tax;
-    balance -= tax;
-    deposit->accrued_deposit += interest;
-    deposit->sum = balance;
   }
-  printf("accrued deposit: %lf, sum: %lf", deposit->accrued_deposit, deposit->sum);
+
+  if (deposit->capitalization_of_interest) {
+    deposit->sum = deposit->deposit + deposit->accrued_deposit;
+  } else {
+    deposit->sum = deposit->deposit;
+  }
+  if (deposit->replenishment && deposit->frequency_of_replanishment)
+    deposit->sum += deposit->replenishment * (int)(deposit->term / deposit->frequency_of_replanishment);
+  if (deposit->withdrawal && deposit->frequency_of_withdrawal)
+    deposit->sum -= deposit->withdrawal * (int)(deposit->term / deposit->frequency_of_withdrawal);
   return SUCCESS;
 }

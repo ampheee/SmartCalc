@@ -23,8 +23,6 @@ typedef struct Queue {
 
 Queue *queue_init();
 Lexeme *queue_pop(Queue *queue);
-Lexeme *queue_seek(Queue *queue);
 void queue_push(Queue *queue, Lexeme *New);
 void queue_free(Queue *queue);
-int queue_add_new_lex(Queue *queue, Lexeme new_value);
 #endif //SMARTCALC_QUEUE_H

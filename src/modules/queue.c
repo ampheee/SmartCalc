@@ -27,23 +27,11 @@ Lexeme *queue_pop(Queue *queue) {
     }
     return popped;
 }
-Lexeme *queue_seek(Queue *queue) {
-    QueNode *popped_node = NULL;
-    Lexeme *popped_lex = NULL;
-    if (queue != NULL) {
-        if (queue->size >= 0) {
-            popped_node = queue->head;
-            if (popped_node != NULL) {
-                popped_lex = popped_node->lex;
-            }
-        }
-    }
-    return popped_lex;
-}
+
 void queue_push(Queue *queue, Lexeme *new_lexeme) {
     if (queue != NULL) {
         QueNode *new_node = malloc(sizeof(QueNode));
-        if (new_node != NULL) {
+        if (new_node != NULL && new_lexeme != NULL) {
             new_node->lex = new_lexeme;
             new_node->next = NULL;
             if (queue->tail == NULL) {

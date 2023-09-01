@@ -1,6 +1,6 @@
 #include "arithmetics.h"
 
-double calculate(Queue* que, double x, int *Status) {
+double calculate(Queue* que, int *Status) {
     double result = 0.0;
     QueNode* popped = que->head;
     Stack* stack = stack_init();
@@ -10,42 +10,49 @@ double calculate(Queue* que, double x, int *Status) {
         if (lex->type == NUMBER) {
             Lexeme* new_lex = (Lexeme*)calloc(1, sizeof(Lexeme));
             new_lex->type = NUMBER;
-            if (lex->chr != 'x') {
-                new_lex->num = lex->num;
-            } else {
-                new_lex->num = x;
-                if (lex->num < 0) new_lex->num *= -1;
-            }
+            new_lex->num = lex->num;
             stack_push(stack, new_lex);
         }
         if (lex->type == FUNCTION) {
             Lexeme* popped_lex = stack_pop(stack);
-            if (is_invalid_num(popped_lex, Status) == false) {
-                double res_value = calculate_func(popped_lex->num, lex->chr);
-                popped_lex->num = res_value;
+            if (is_invalid_num(popped_lex) == false) {
+                popped_lex->num = calculate_func(popped_lex->num, lex->chr);
                 stack_push(stack, popped_lex);
+            } else {
+                *Status = FAIL;
             }
         }
         if (lex->type == OPERATOR) {
-            Lexeme* popped_lex1 = stack_pop(stack);
-            Lexeme* popped_lex2 = stack_pop(stack);
-            if (is_invalid_lexemes(popped_lex1, popped_lex2, Status) == false) {
-                double res_value = calculate_nums(popped_lex1->num, popped_lex2->num, lex->chr);
-                free(popped_lex1);
-                free(popped_lex2);
+            Lexeme* lex1 = stack_pop(stack);
+            Lexeme* lex2 = stack_pop(stack);
+            if (lex1 || lex2) {
                 Lexeme* new_lex = (Lexeme*)calloc(1, sizeof(Lexeme));
-                new_lex->num = res_value;
-                new_lex->type = NUMBER;
-                stack_push(stack, new_lex);
+            if (!is_invalid_num(lex1) && is_invalid_num(lex2) &&
+                (lex->chr == '-' || lex->chr == '+')) {
+                new_lex->num =calculate_nums(lex1->num, 0, lex->chr);
+                free(lex1);
+            } else if (is_invalid_num(lex1) && !is_invalid_num(lex2) &&
+                (lex->chr == '-' || lex->chr == '+')) {
+                new_lex->num = calculate_nums(lex2->num, 0, lex->chr);
+                free(lex2);
+            } else if (is_invalid_lexemes(lex1, lex2, Status) == false) {
+                new_lex->num = calculate_nums(lex1->num, lex2->num, lex->chr);
+                free(lex1);
+                free(lex2);
+                }
+            new_lex->type = NUMBER;
+            stack_push(stack, new_lex);
+            } else {
+                *Status = FAIL;
             }
         }
     }
     Lexeme* result_lex = stack_pop(stack);
-    if (is_invalid_num(result_lex, Status) == false) {
+    if (is_invalid_num(result_lex) == false) {
         result = result_lex->num;
         free(result_lex);
     } else {
-        printf("\n!ERR:result is NOT a num\n");
+        printf("\n!ERR:result is NOT a num\n %p", result_lex);
     }
     if (stack->size > 0) {
         printf(WRONG_EXP);
@@ -137,23 +144,22 @@ double to_degrees(double x) {
     return degrees;
 }
 
-bool is_invalid_num(Lexeme *num, int *Status) {
+bool is_invalid_num(Lexeme *num) {
     bool is_invalid = false;
     if (num == NULL) {
         is_invalid = true;
     } else if (num->type != NUMBER) {
         is_invalid = true;
     }
-    *Status = is_invalid ? FAIL : SUCCESS;
     return is_invalid;
 }
 
 bool is_invalid_lexemes(Lexeme *num1, Lexeme *num2, int *Status) {
     bool is_invalid = false;
-    if (is_invalid_num(num1, Status) || is_invalid_num(num2, Status)) {
+    if (is_invalid_num(num1) && is_invalid_num(num2)) {
+        *Status = FAIL;
         is_invalid = true;
     }
-    is_invalid ? printf(WRONG_EXP) : 0;
     return is_invalid;
 }
 

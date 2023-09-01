@@ -19,10 +19,6 @@ Lexeme *stack_pop(Stack *stack) {
             result = popped->lex;
             stack->size--;
             free(popped);
-        } else if (stack->tail == NULL) {
-            printf("stack tail is null error\n");
-        } else if (stack->tail->lex == NULL) {
-            printf("stack tail lex is null\n");
         }
     } else if (stack == NULL) {
         printf(STACK_IS_NULL_ERROR);
@@ -44,13 +40,16 @@ void stack_free(Stack *stack) {
     if (stack != NULL) {
         while (stack->tail != NULL && stack->size > 0) {
             Lexeme *popped = stack_pop(stack);
-            free(popped);
+            if (popped != NULL) {
+                free(popped);
+            }
         }
+        free(stack);
     } else {
         printf(STACK_IS_NULL_ERROR);
     }
-    free(stack);
 }
+
 void stack_push(Stack *stack, Lexeme *new_lexeme) {
     if (stack != NULL) {
         StackNode *new_node = (StackNode *) calloc(1, sizeof(StackNode));
